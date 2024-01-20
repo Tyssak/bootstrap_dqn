@@ -1,0 +1,4 @@
+.venv/
+venv/
+rewards.txt
+__pycache__/

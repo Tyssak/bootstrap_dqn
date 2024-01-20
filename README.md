@@ -6,6 +6,13 @@ This repo contains our implementation of a Bootstrapped DQN with options to add 
 
 [Randomized Prior Functions for Deep Reinforcement Learning](https://arxiv.org/abs/1806.03335)
 
+## Installation
+
+```sh
+pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cu118  # For CUDA (GPU)
+pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cpu  # For CPU
+```
+
 # Some results on Breakout
 
 ![alt text](figs/breakout_winning_gaps.gif?raw=true "Breakout Agent - Bootstrap, Prior")
@@ -50,7 +57,6 @@ Freeway agent score in evaluation - reward vs steps
 atari-py installed from https://github.com/kastnerkyle/atari-py  
 torch='1.0.1.post2'  
 cv2='4.0.0'  
-
 
 # References
 
