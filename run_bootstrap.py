@@ -105,7 +105,7 @@ class ActionGetter:
         self.replay_memory_start_size = replay_memory_start_size
         self.max_steps = max_steps
         self.random_state = np.random.RandomState(random_seed)
-        self.filename_prev = "filename"
+        self.filename_prev = 'model.pkl'
 
         # Slopes and intercepts for exploration decrease
         if self.eps_annealing_frames > 0:
