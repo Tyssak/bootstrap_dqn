@@ -65,7 +65,8 @@ def handle_checkpoint(last_save, cnt):
                  'perf':perf,
                 }
         filename = os.path.abspath(model_base_filepath + "_%010dq.pkl"%cnt)
-        save_checkpoint(state, filename)
+        save_checkpoint(state, filename, self.filename_prev)
+        self.filename_prev = filename
         # npz will be added
         buff_filename = os.path.abspath(model_base_filepath + "_%010dq_train_buffer"%cnt)
         replay_memory.save_buffer(buff_filename)
@@ -104,6 +105,7 @@ class ActionGetter:
         self.replay_memory_start_size = replay_memory_start_size
         self.max_steps = max_steps
         self.random_state = np.random.RandomState(random_seed)
+        self.filename_prev = "filename"
 
         # Slopes and intercepts for exploration decrease
         if self.eps_annealing_frames > 0:
