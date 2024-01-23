@@ -6,8 +6,12 @@ from imageio import mimsave
 #from skimage.transform import resize
 import cv2
 
-def save_checkpoint(state, filename='model.pkl'):
-        
+def save_checkpoint(state, filename='model.pkl', filenamePrev='model.pkl'):
+    # Remove the previous model file if it exists
+    if os.path.exists(filenamePrev):
+        os.remove(filenamePrev)
+        print("Removed previous model file: %s" % filename)
+           
     print("starting save of model %s" %filename)
     torch.save(state, filename)
     print("finished save of model %s" %filename)
