@@ -7,10 +7,6 @@ from imageio import mimsave
 import cv2
 
 def save_checkpoint(state, filename='model.pkl'):
-    # Remove the previous model file if it exists
-    if os.path.exists(filename):
-        os.remove(filename)
-        print("Removed previous model file: %s" % filename)
         
     print("starting save of model %s" %filename)
     torch.save(state, filename)
