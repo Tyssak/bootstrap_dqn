@@ -52,7 +52,7 @@ def matplotlib_plot_all(p):
     plot_dict_losses({'steps avg reward':{'index':steps,'val':p['avg_rewards']}}, name=os.path.join(model_base_filedir, 'steps_avg_reward.png'), rolling_length=0)
     plot_dict_losses({'eval rewards':{'index':p['eval_steps'], 'val':p['eval_rewards']}}, name=os.path.join(model_base_filedir, 'eval_rewards_steps.png'), rolling_length=0)
 
-def handle_checkpoint(last_save, cnt):
+def handle_checkpoint(last_save, cnt, filename_prev):
     if (cnt-last_save) >= info['CHECKPOINT_EVERY_STEPS']:
         st = time.time()
         print("beginning checkpoint", st)
@@ -65,14 +65,14 @@ def handle_checkpoint(last_save, cnt):
                  'perf':perf,
                 }
         filename = os.path.abspath(model_base_filepath + "_%010dq.pkl"%cnt)
-        save_checkpoint(state, filename, self.filename_prev)
-        self.filename_prev = filename
+        save_checkpoint(state, filename, filename_prev)
+        filename_prev = filename
         # npz will be added
         buff_filename = os.path.abspath(model_base_filepath + "_%010dq_train_buffer"%cnt)
         replay_memory.save_buffer(buff_filename)
         print("finished checkpoint", time.time()-st)
-        return last_save
-    else: return last_save
+        return last_save, filename_prev
+    else: return last_save, filename_prev
 
 
 class ActionGetter:
@@ -105,7 +105,6 @@ class ActionGetter:
         self.replay_memory_start_size = replay_memory_start_size
         self.max_steps = max_steps
         self.random_state = np.random.RandomState(random_seed)
-        self.filename_prev = 'model.pkl'
 
         # Slopes and intercepts for exploration decrease
         if self.eps_annealing_frames > 0:
@@ -196,6 +195,7 @@ def ptlearn(states, actions, rewards, next_states, terminal_flags, masks):
 
 def train(step_number, last_save):
     """Contains the training and evaluation loops"""
+    filenamePrev = 'model.pkl'
     epoch_num = len(perf['steps'])
     while step_number < info['MAX_STEPS']:
         ########################
@@ -253,7 +253,7 @@ def train(step_number, last_save):
             perf['episode_times'].append(ep_time)
             perf['episode_relative_times'].append(time.time()-info['START_TIME'])
             perf['avg_rewards'].append(np.mean(perf['episode_reward'][-100:]))
-            last_save = handle_checkpoint(last_save, step_number)
+            last_save, filenamePrev = handle_checkpoint(last_save, step_number, filenamePrev)
 
             if not epoch_num%info['PLOT_EVERY_EPISODES'] and step_number > info['MIN_HISTORY_TO_LEARN']:
                 # TODO plot title
