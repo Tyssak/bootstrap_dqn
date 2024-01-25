@@ -327,7 +327,7 @@ if __name__ == '__main__':
 
     info = {
         #"GAME":'roms/breakout.bin', # gym prefix
-        "GAME":'roms/jamesbond.bin', # gym prefix
+        "GAME":'roms/zaxxon.bin', # gym prefix
         "DEVICE":device, #cpu vs gpu set by argument
         "NAME":'FRANKbootstrap_fasteranneal_pong', # start files with name
         "DUELING":True, # use dueling dqn
